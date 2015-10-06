@@ -2,22 +2,32 @@
  * 
  */
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import mpi.*;
+import mpi.MPI;
+import mpi.MPIException;
+import mpi.Status;
+
 /**
  * @author Matthew Schmidt
  *
  */
 public class MergeSort {
 
-
+	static long start;
+	static long finished;
+	
+	
 
 	public static void main(String[] args) throws MPIException{
 
+		MPI.Init(args);
 
 		int source,dest;
+		int startPoint=-1,endPoint=-1;
 		int tag=50;
 
 		int myrank=MPI.COMM_WORLD.getRank();
@@ -33,6 +43,7 @@ public class MergeSort {
 
 
 		if(myrank == 0){
+
 			ArrayList<Integer> Data = new ArrayList<Integer>();
 			Scanner scan = new Scanner(args[0]);
 			while(scan.hasNext()){
@@ -44,9 +55,11 @@ public class MergeSort {
 			for (int i=0+2;i<message.length;i++){
 				message[i]=(int) Data.get(i);
 			}
-
+			start = System.currentTimeMillis();
 			begin =0;
 			end =message.length;
+			if(startPoint==-1)startPoint=begin;
+			if(endPoint==-1)endPoint=end;
 			message[0]=begin;
 			message[1]=end;
 			message[2]=1;
@@ -62,6 +75,20 @@ public class MergeSort {
 
 		begin=message[0];
 		end = message[1];
+
+		if(myrank==0 && message[3]==0 && begin == startPoint && end==endPoint){
+			try {
+				finished = System.currentTimeMillis();
+				if(args.length<1)WriteOut(length,message,args[1]);
+				else WriteOut(length,message,nameFormat(args[0]));
+
+			} catch (IOException e) {
+				MPI.Finalize();
+				e.printStackTrace();
+			}
+			MPI.Finalize();
+		}
+
 		if(message[3]==1){
 			if(end-begin>2){
 				prev=k.getSource();
@@ -109,6 +136,33 @@ public class MergeSort {
 
 		}
 
+	}
+
+	private static String nameFormat(String string) {
+		int last = string.lastIndexOf('.');
+		String end =string.substring(last);
+		String begin= string.substring(0, last);
+
+		return begin+"-sorted-"+end;
+	}
+
+	private static void WriteOut(int length, int[] message, String args) throws IOException {
+		FileWriter writer = new FileWriter(args);
+		
+		writer.write("Starting time = "+start+"\r\n");
+		System.out.print("Starting time = "+start+"\r\n");
+		
+		writer.write("Finished time = "+finished+"\r\n");
+		System.out.print("Finished time = "+finished+"\r\n");
+	
+		long time = finished-start;
+		writer.write("Time Taken = "+time+"\r\n");
+		System.out.print("Time Taken = "+time+"\r\n");
+		
+		for(int i=3 ;i<length;i++){
+			writer.write(message[i]+"\r\n");
+		}
+		writer.close();
 	}
 
 	private static int[] merge(int[] left, int leftLength, int[] right, int rightLength) {
