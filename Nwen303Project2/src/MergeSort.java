@@ -22,7 +22,8 @@ public class MergeSort {
 		int myrank=MPI.COMM_WORLD.getRank();
 		int size=MPI.COMM_WORLD.getSize();
 		
-		int next= (myrank+1)%size;
+		int left= (myrank+1)%size;
+		int right =(myrank+2)%size;
 		//int prev=(myrank+size-1)%size;
 		
 		int [] message=new int[1];
@@ -48,7 +49,7 @@ public class MergeSort {
 		message[0]=begin;
 		message[1]=end;
 		message[2]=1;
-		MPI.COMM_WORLD.send(message, message.length+3, MPI.INT, next, tag);
+		MPI.COMM_WORLD.send(message, message.length+3, MPI.INT, MPI.ANY_SOURCE, tag);
 		}
 		
 		Status k = MPI.COMM_WORLD.recv(message, 100003, MPI.INT, MPI.ANY_SOURCE, tag);
@@ -63,40 +64,50 @@ public class MergeSort {
 		if(end-begin>2){
 			
 			int middle = (end+begin)/2;
-			int[] left = new int[middle+2];
-			left[0]=begin;
-			left[1]=middle;
-			for(int i= 2;i<middle+2;i++){
-				left[i-2]=message[i];
+			int[] leftArray = new int[middle+3];
+			leftArray[0]=begin;
+			leftArray[1]=middle;
+			for(int i= 3;i<middle+3;i++){
+				leftArray[i-3]=message[i];
 			}
-			MPI.COMM_WORLD.send(left,length , MPI.INT, next, tag);
-			int[] right = new int[middle+2];
+			MPI.COMM_WORLD.send(leftArray,length , MPI.INT, left, tag);
+			int[] rightArray = new int[middle+2];
 			
-			int nextnext =(myrank+2)%size;
-			right[1]=begin;
-			right[0]=middle;
+			
+			rightArray[1]=begin;
+			rightArray[0]=middle;
 			int t=2;
 			for(int i= middle;i<middle+2;i++){
-				right[t]=message[i];
+				rightArray[t]=message[i];
 				t++;
 			}
-			MPI.COMM_WORLD.send(right, length, MPI.INT, nextnext, tag);
+			MPI.COMM_WORLD.send(rightArray, length, MPI.INT, right, tag);
 			
 		}else{
 			message[3]=0;
-			MPI.COMM_WORLD.send(message, length, MPI.INT, next, tag);
+			MPI.COMM_WORLD.send(message, length, MPI.INT, k.getSource(), tag);
 		}
 		}else{
+			int[] second = new int[(length/2)+3];
+			Status j=null;
+			if(k.getSource()==left){
+				j = MPI.COMM_WORLD.recv(second, 100003, MPI.INT, right, tag);
+				message = merge(message,second);
+			}else{
+				j = MPI.COMM_WORLD.recv(second, 100003, MPI.INT, left, tag);
+				message = merge(second,message);
+			}
+			
 			
 		}
 		
-		
+	}
 
+	private static int[] merge(int[] left, int[] right) {
+	//remember to ignore the first 3 elements;
 		
-		
-		
-		
-		
+		return null;
+	
 	}
 	
 	
