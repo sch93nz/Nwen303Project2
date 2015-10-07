@@ -76,7 +76,8 @@ public class MergeSort {
 		boolean run =true;
 		while(run){
 			Status k =MPI.COMM_WORLD.recv(Control, 4, MPI.INT, MPI.ANY_SOURCE, tag);
-
+			message=new int[Control[3]];
+			System.out.println(""+myrank+" Says : Recieved "+Control[3]+ " data from "+k.getSource()+"");
 			k = MPI.COMM_WORLD.recv(message, Control[3], MPI.INT, MPI.ANY_SOURCE, tag);
 			if(k.getError()!=0){
 				System.out.println(""+myrank+"Error");
@@ -108,7 +109,7 @@ public class MergeSort {
 			if(Control[2]==1){
 				if(end-begin>2){
 					prev=k.getSource();
-					int middle = (end+begin)/2;
+					int middle = length/2;
 					int[] leftArray = new int[middle];
 
 					for(int i= 0;i<middle;i++){
@@ -119,7 +120,7 @@ public class MergeSort {
 					Control[2]=1;
 					Control[3]=leftArray.length;
 
-					System.out.println("L "+myrank+"   :  "+Control[3]+"  &&  "+leftArray.length+ "    ->  "+left+"");
+					System.out.println("L "+myrank+"    :  "+middle+"  &&  "+Control[3]+"  &&  "+leftArray.length+"    ->  "+left+"");
 
 					System.out.println(""+myrank+" Says : Sending Control to left set of data to "+left+"");
 					MPI.COMM_WORLD.send(Control, 4, MPI.INT, left, tag);
@@ -137,7 +138,7 @@ public class MergeSort {
 					Control[2]=1;
 					Control[3]=rightArray.length;
 
-					System.out.println("R "+myrank+"   :  "+Control[3]+"  &&  "+rightArray.length+"    ->  "+right+"");
+					System.out.println("R "+myrank+"    :  "+middle+"  &&  "+Control[3]+"  &&  "+rightArray.length+"    ->  "+right+"");
 					System.out.println(""+myrank+" Says : Sending Control to right set of data to "+right+"");
 					MPI.COMM_WORLD.send(Control, 4, MPI.INT, right, tag);
 					System.out.println(""+myrank+" Says : Sending message to right set of data to "+right+"");
@@ -151,21 +152,23 @@ public class MergeSort {
 				}
 			}else{
 
-				int[] second = new int[(length/2)];
+
 				Status j=null;
 				int [] BControl= new int[4];
 				if(k.getSource()==left){
 					System.out.println(""+myrank+" Says : Recieving Sort Data data from "+right+"");
 					MPI.COMM_WORLD.recv(BControl, 4, MPI.INT, MPI.ANY_SOURCE, tag);
-					j = MPI.COMM_WORLD.recv(message, BControl[3], MPI.INT, right, tag);
+					int[] second = new int[BControl[3]];
+					j = MPI.COMM_WORLD.recv(second, BControl[3], MPI.INT, right, tag);
 
 					//	j = MPI.COMM_WORLD.recv(second, 100003, MPI.INT, right, tag);
-					message = merge(message,length,second,Control[3]);
+					message = merge(message,length,second,BControl[3]);
 				}else{
 					System.out.println(""+myrank+" Says : Recieving Sort Data  data from "+left+"");
 					MPI.COMM_WORLD.recv(BControl, 4, MPI.INT, MPI.ANY_SOURCE, tag);
+					int[] second = new int[BControl[3]];
 					j = MPI.COMM_WORLD.recv(second, BControl[3], MPI.INT, left, tag);
-					message = merge(second,Control[3],message,length);
+					message = merge(second,BControl[3],message,length);
 
 					Control[3] = message.length;
 				}
