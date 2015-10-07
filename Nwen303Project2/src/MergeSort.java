@@ -187,7 +187,7 @@ public class MergeSort {
 				MPI.Finalize();
 		} catch (MPIException e1) {
 			System.out.println("What the Fuck"+myrank+"||");
-			System.out.println(Control.length);
+			
 
 
 			e1.printStackTrace();
