@@ -1,1 +1,14 @@
 /bin/
+
+.metadata/
+.recommenders/
+Nwen303Project2/.classpath
+Nwen303Project2/.project
+Nwen303Project2/.settings/
+Nwen303Project2/src/med.3.killer.1000.txt
+RemoteSystemsTempFiles/
+Sort/
+nwen303-02.sh
+nwen303_network.sh
+testdata.zip
+testdata/
