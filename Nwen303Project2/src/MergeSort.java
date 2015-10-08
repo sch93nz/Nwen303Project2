@@ -71,7 +71,7 @@ public class MergeSort {
 				if(endPoint==-1)endPoint=end;
 
 				Control[0]=begin;
-				Control[1]=end;
+				Control[1]=end /2;
 				Control[2]=1;
 				Control[3]=message.length;
 				Control[4]= myrank;
@@ -108,9 +108,9 @@ public class MergeSort {
 
 
 				begin=(int) Control[0];
-				end = (int) Control[1];
+				
 				int length = (int) Control[3];
-				if(myrank==0 && Control[2]==0 &&begin == startPoint && end == endPoint){
+				if(myrank==0 && Control[2]==0 &&begin == startPoint ){
 					try {
 						finished = System.currentTimeMillis();
 						if(args.length<1)WriteOut(length,message,args[1]);
@@ -144,7 +144,11 @@ public class MergeSort {
 
 					long [] BControl= Arrays.copyOf(Control, Control.length);
 
-					if(k.getSource()==left){
+					if(myrank!=0&& Control[1]==Control[3]&& Control[2]==0){
+					
+						
+						
+					}else if(k.getSource()==left){
 						
 						System.out.println(""+myrank+" Says : Recieving Control Sort Data data from "+right+"");
 						MPI.COMM_WORLD.recv(BControl, 5, MPI.LONG, MPI.ANY_SOURCE, tag);
@@ -154,7 +158,7 @@ public class MergeSort {
 							st.append(i+" ");
 						}
 						System.out.println(""+myrank+" Says: Control Res = "+st.toString());
-						System.out.println(""+myrank+" Says : Recieving sizeof "+BControl[3]+" Sort Data data from "+right+"");
+						System.out.println(""+myrank+" Says : Recieving sizeof "+BControl[3]+" Sort Data data from "+BControl[4]+"");
 						j = MPI.COMM_WORLD.recv(second, (int) BControl[3], MPI.INT,(int) BControl[4], tag);
 						
 						message = merge(myrank,message,length,second,(int) BControl[3]);
@@ -171,7 +175,7 @@ public class MergeSort {
 							st.append(i+" ");
 						}
 						System.out.println(""+myrank+" Says: Control Res = "+st.toString());
-						System.out.println(""+myrank+" Says : Recieving sizeof "+BControl[3]+" Sort Data data from "+left+"");
+						System.out.println(""+myrank+" Says : Recieving sizeof "+BControl[3]+" Sort Data data from "+BControl[4]+"");
 						j = MPI.COMM_WORLD.recv(second, (int) BControl[3], MPI.INT,(int) BControl[4], tag);
 						
 						message = merge(myrank,second,(int) BControl[3],message,length);
@@ -181,7 +185,7 @@ public class MergeSort {
 					}
 
 					if(Control[0]>BControl[0])Control[0]= BControl[0];
-					if(Control[1]<BControl[1])Control[1]=BControl[1];
+					
 					Control[4]=prev;
 					System.out.println(""+myrank+" Says : Decleared end and returning Sorted data sizeof "+Control[3]+" to "+prev+"");
 					System.out.println(""+myrank+" Says : Decleared end and returning sorted data to "+prev+"");
@@ -264,7 +268,7 @@ public class MergeSort {
 		}
 		System.out.println("R "+myrank+" Data>>"+st.toString());
 		Control[0]=middle;
-		Control[1]=end;
+		
 		Control[2]=1;
 		Control[3]=rightArray.length;
 		Control[4] =myrank;
@@ -298,7 +302,7 @@ public class MergeSort {
 		System.out.println("L "+myrank+" Data>>"+st.toString());
 
 		Control[0]=begin;
-		Control[1]=middle;
+		
 		Control[2]=1;
 		Control[3]=leftArray.length;
 		Control[4] = myrank;
