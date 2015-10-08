@@ -110,7 +110,7 @@ public class MergeSort {
 				end=(int) Control[1];
 
 				int length = (int) Control[3];
-				if(myrank==0 && Control[2]==0 && begin == startPoint && message.length== Control[2]*2){
+				if(myrank==0 && Control[2]==0 && begin == startPoint && Control[3] == Control[1]*2){
 					try {
 						finished = System.currentTimeMillis();
 						if(args.length<1)WriteOut(length,message,args[1]);
