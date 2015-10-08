@@ -91,7 +91,7 @@ public class MergeSort {
 //					st.append(i+" ");
 //				}
 //				System.out.println(""+myrank+" Says: Control Res = "+st.toString());
-//				message=new int[(int) Control[3]];
+				message=new int[(int) Control[3]];
 				st = new StringBuffer();
 				System.out.println(""+myrank+" Says : Recieved "+Control[3]+ " data from "+k.getSource()+"");
 				
