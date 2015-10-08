@@ -74,7 +74,7 @@ public class MergeSort {
 				Control[1]=end;
 				Control[2]=1;
 				Control[3]=message.length;
-				Control[4]= left;
+				Control[4]= myrank;
 				MPI.COMM_WORLD.send(Control, 5, MPI.LONG, left, tag);
 				MPI.COMM_WORLD.send(message, message.length, MPI.INT, left, tag);
 				System.out.println(""+myrank+" Says : Sending first set of data to "+ left+"");
