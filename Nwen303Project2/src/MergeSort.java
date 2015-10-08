@@ -148,7 +148,7 @@ public class MergeSort {
 						st.append(i+" ");
 					}
 					System.out.println(""+myrank+" Says: looking for end Control  = "+st.toString());
-					if(myrank!=0 && Control[1]==Control[3] && Control[2]==0){
+					if(myrank!=0 && (Control[1]==Control[3] && Control[2]==0)|| Control[1]*2==Control[3] && Control[2]==0){
 
 						Control[4]=prev;
 						System.out.println(""+myrank+" Says : Looking for end sizeof "+Control[3]+" to "+prev+"");
@@ -201,6 +201,9 @@ public class MergeSort {
 						MPI.COMM_WORLD.send(Control, 5, MPI.LONG, left, tag);
 						MPI.COMM_WORLD.send(message, message.length, MPI.INT, left, tag);
 					}
+					
+					
+					
 				}
 			}
 			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>DEATH<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
