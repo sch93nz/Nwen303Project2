@@ -161,10 +161,10 @@ public class MergeSort {
 					for(long i : BControl){
 						st.append(i+" ");
 					}
-					Control[4]=myrank;
+					
 					System.out.println(""+myrank+" Says: looking for end Control  = "+st.toString());
 					if(myrank!=0 && (Control[1]==Control[3] && Control[2]==0)|| Control[1]*2==Control[3] && Control[2]==0){
-
+						Control[4]=myrank;
 						System.out.println(""+myrank+" Says : Looking for end sizeof "+Control[3]+" to "+prev+"");
 						System.out.println(""+myrank+" Says : Looking for end sorted data to "+left+"");
 						MPI.COMM_WORLD.send(Control, 5, MPI.LONG, left, tag);
