@@ -188,9 +188,9 @@ public class MergeSort {
 					
 					Control[4]=prev;
 					System.out.println(""+myrank+" Says : Decleared end and returning Sorted data sizeof "+Control[3]+" to "+prev+"");
-					System.out.println(""+myrank+" Says : Decleared end and returning sorted data to "+prev+"");
-					MPI.COMM_WORLD.send(Control, 5, MPI.LONG, prev, tag);
-					MPI.COMM_WORLD.send(message, message.length, MPI.INT, prev, tag);
+					System.out.println(""+myrank+" Says : Decleared end and returning sorted data to "+left+"");
+					MPI.COMM_WORLD.send(Control, 5, MPI.LONG, left, tag);
+					MPI.COMM_WORLD.send(message, message.length, MPI.INT, left, tag);
 					//if(myrank!=0)
 					//	run= false;
 
