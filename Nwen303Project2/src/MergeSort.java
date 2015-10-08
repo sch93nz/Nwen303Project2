@@ -143,8 +143,12 @@ public class MergeSort {
 					Status j=null;
 
 					long [] BControl= Arrays.copyOf(Control, Control.length);
-
-					if(myrank!=0&& Control[1]==Control[3]&& Control[2]==0){
+					st = new StringBuffer();
+					for(long i : BControl){
+						st.append(i+" ");
+					}
+					System.out.println(""+myrank+" Says: looking for end Control  = "+st.toString());
+					if(myrank!=0 && Control[1]==Control[3] && Control[2]==0){
 					
 						Control[4]=prev;
 						System.out.println(""+myrank+" Says : Looking for end sizeof "+Control[3]+" to "+prev+"");
