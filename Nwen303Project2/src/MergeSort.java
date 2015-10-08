@@ -90,6 +90,7 @@ public class MergeSort {
 				if(Control[0] ==-1 && Control[1] ==-1 && Control[2] ==-1 && Control[3] ==-1&& Control[4]==-1){
 					System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>DEATH<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 					MPI.Finalize();
+					System.exit(0);
 				}
 				for(long i : Control){
 					st.append(i+" ");
@@ -134,6 +135,7 @@ public class MergeSort {
 					}
 					System.out.println(""+myrank+" Death");
 					MPI.Finalize();
+					System.exit(0);
 				}
 
 				if(Control[2]==1){
