@@ -98,7 +98,7 @@ public class MergeSort {
 				System.out.println(""+myrank+" Says: Control Res = "+st.toString());
 				message=new int[(int) Control[3]];
 				st = new StringBuffer();
-				System.out.println(""+myrank+" Says : Recieving "+Control[3]+ " data from "+k.getSource()+"");
+				System.out.println(""+myrank+" Says : Recieving "+Control[3]+ " data from "+k.getSource()+"||"+Control[4]+"");
 
 				k = MPI.COMM_WORLD.recv(message, (int) Control[3], MPI.INT, (int)Control[4], tag);
 				st = new StringBuffer();
@@ -297,9 +297,12 @@ public class MergeSort {
 		Control[4] =myrank;
 		System.out.println("R rank="+myrank+"    :  middle="+middle+"  &&  length="+Control[3]+
 				"  &&  arrayLength="+rightArray.length+"    ->  "+right+"");
+		
 		System.out.println(""+myrank+" Says : Sending Control to right set of data to "+right+"");
 		MPI.COMM_WORLD.send(Control, 5, MPI.LONG, right, tag);
+		
 		System.out.println(""+myrank+" Says : Sending message to right set of data to "+right+"");
+		
 		MPI.COMM_WORLD.send(rightArray, rightArray.length, MPI.INT, right, tag);
 	}
 
