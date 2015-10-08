@@ -51,8 +51,6 @@ public class MergeSort {
 
 			int begin=0,end=0;
 
-
-
 			if(myrank == 0){
 
 				ArrayList<Integer> Data = new ArrayList<Integer>();
@@ -80,10 +78,15 @@ public class MergeSort {
 				MPI.COMM_WORLD.send(message, message.length, MPI.INT, left, tag);
 				System.out.println(""+myrank+" Says : Sending first set of data to "+ left+"");
 			}
+			
+			
 			boolean run =true;
 			while(run){
+				
 				StringBuffer st = new StringBuffer();
+				
 				k =MPI.COMM_WORLD.recv(Control, 4, MPI.LONG, MPI.ANY_SOURCE, tag);
+				
 				for(long i : Control){
 					st.append(i+" ");
 				}
@@ -91,7 +94,9 @@ public class MergeSort {
 				message=new int[(int) Control[3]];
 				st = new StringBuffer();
 				System.out.println(""+myrank+" Says : Recieved "+Control[3]+ " data from "+k.getSource()+"");
+				
 				k = MPI.COMM_WORLD.recv(message, (int) Control[3], MPI.INT, MPI.ANY_SOURCE, tag);
+				
 				for(long i : message){
 					st.append(i+" ");
 				}
@@ -122,55 +127,15 @@ public class MergeSort {
 					if(Control[3]>2){
 						prev=k.getSource();
 						int middle = length/2;
-						int[] leftArray = new int[middle];
-						st = new StringBuffer();
-						for(int i= 0;i<middle;i++){
-							st.append(message[i]+" ");
-							leftArray[i]=message[i];
-						}
-						System.out.println("L "+myrank+" Data>>"+st.toString());
+						doLeft(myrank, Control, message, tag, left, begin,
+								middle);
 
-						Control[0]=begin;
-						Control[1]=middle;
-						Control[2]=1;
-						Control[3]=leftArray.length;
-
-					System.out.println("L rank="+myrank+"    :  middle="+middle+"  &&  length="+Control[3]+
-								"  &&  ArrayLength="+leftArray.length+"    ->  "+left+"");
-
-						System.out.println(""+myrank+" Says : Sending Control to left set of data to "+left+"");
-						MPI.COMM_WORLD.send(Control, 4, MPI.LONG, left, tag);
-						System.out.println(""+myrank+" Says : Sending message to left set of data to "+left+"");
-						MPI.COMM_WORLD.send(leftArray,leftArray.length , MPI.INT, left, tag);
-
-						int[] rightArray = new int[length-middle];
-						int t=0;
-						st = new StringBuffer();
-
-						for(int i= middle;i<length ;i++){
-							st.append(message[i]+" ");
-							rightArray[t]=message[i];
-							t++;
-						}
-						System.out.println("R "+myrank+" Data>>"+st.toString());
-						Control[0]=middle;
-						Control[1]=end;
-						Control[2]=1;
-						Control[3]=rightArray.length;
-
-						System.out.println("R rank="+myrank+"    :  middle="+middle+"  &&  length="+Control[3]+
-								"  &&  arrayLength="+rightArray.length+"    ->  "+right+"");
-						System.out.println(""+myrank+" Says : Sending Control to right set of data to "+right+"");
-						MPI.COMM_WORLD.send(Control, 4, MPI.LONG, right, tag);
-						System.out.println(""+myrank+" Says : Sending message to right set of data to "+right+"");
-						MPI.COMM_WORLD.send(rightArray, rightArray.length, MPI.INT, right, tag);
+						doRight(myrank, Control, message, tag, right, end,
+								length, middle);
 
 					}else{
-						Control[2]=0;
-
-						MPI.COMM_WORLD.send(Control, 4, MPI.LONG, k.getSource(), tag);
-						System.out.println(""+myrank+" Says : Decleared end and returning data sizeof -"+Control[3]+"- to "+k.getSource()+"");
-						MPI.COMM_WORLD.send(message, length, MPI.INT, k.getSource(), tag);
+						
+						declearEnd(myrank, Control, message, k, tag, length);
 					}
 				}else{
 
@@ -185,6 +150,7 @@ public class MergeSort {
 						int[] second = new int[(int) BControl[3]];
 						System.out.println(""+myrank+" Says : Recieving sizeof "+BControl[3]+" Sort Data data from "+right+"");
 						j = MPI.COMM_WORLD.recv(second, (int) BControl[3], MPI.INT, right, tag);
+						
 						message = merge(myrank,message,length,second,(int) BControl[3]);
 
 						Control[3] = message.length;
@@ -239,6 +205,97 @@ public class MergeSort {
 			}
 
 		}
+	}
+
+	/**
+	 * @param myrank
+	 * @param Control
+	 * @param message
+	 * @param k
+	 * @param tag
+	 * @param length
+	 * @throws MPIException
+	 */
+	private static void declearEnd(int myrank, long[] Control, int[] message,
+			Status k, int tag, int length) throws MPIException {
+		Control[2]=0;
+
+		MPI.COMM_WORLD.send(Control, 4, MPI.LONG, k.getSource(), tag);
+		System.out.println(""+myrank+" Says : Decleared end and returning data sizeof -"+Control[3]+"- to "+k.getSource()+"");
+		MPI.COMM_WORLD.send(message, length, MPI.INT, k.getSource(), tag);
+	}
+
+	/**
+	 * @param myrank
+	 * @param Control
+	 * @param message
+	 * @param tag
+	 * @param right
+	 * @param end
+	 * @param length
+	 * @param middle
+	 * @throws MPIException
+	 */
+	private static void doRight(int myrank, long[] Control, int[] message,
+			int tag, int right, int end, int length, int middle)
+			throws MPIException {
+		StringBuffer st;
+		int[] rightArray = new int[length-middle];
+		int t=0;
+		st = new StringBuffer();
+
+		for(int i= middle;i<length ;i++){
+			st.append(message[i]+" ");
+			rightArray[t]=message[i];
+			t++;
+		}
+		System.out.println("R "+myrank+" Data>>"+st.toString());
+		Control[0]=middle;
+		Control[1]=end;
+		Control[2]=1;
+		Control[3]=rightArray.length;
+
+		System.out.println("R rank="+myrank+"    :  middle="+middle+"  &&  length="+Control[3]+
+				"  &&  arrayLength="+rightArray.length+"    ->  "+right+"");
+		System.out.println(""+myrank+" Says : Sending Control to right set of data to "+right+"");
+		MPI.COMM_WORLD.send(Control, 4, MPI.LONG, right, tag);
+		System.out.println(""+myrank+" Says : Sending message to right set of data to "+right+"");
+		MPI.COMM_WORLD.send(rightArray, rightArray.length, MPI.INT, right, tag);
+	}
+
+	/**
+	 * @param myrank
+	 * @param Control
+	 * @param message
+	 * @param tag
+	 * @param left
+	 * @param begin
+	 * @param middle
+	 * @throws MPIException
+	 */
+	private static void doLeft(int myrank, long[] Control, int[] message,
+			int tag, int left, int begin, int middle) throws MPIException {
+		StringBuffer st;
+		int[] leftArray = new int[middle];
+		st = new StringBuffer();
+		for(int i= 0;i<middle;i++){
+			st.append(message[i]+" ");
+			leftArray[i]=message[i];
+		}
+		System.out.println("L "+myrank+" Data>>"+st.toString());
+
+		Control[0]=begin;
+		Control[1]=middle;
+		Control[2]=1;
+		Control[3]=leftArray.length;
+
+System.out.println("L rank="+myrank+"    :  middle="+middle+"  &&  length="+Control[3]+
+				"  &&  ArrayLength="+leftArray.length+"    ->  "+left+"");
+
+		System.out.println(""+myrank+" Says : Sending Control to left set of data to "+left+"");
+		MPI.COMM_WORLD.send(Control, 4, MPI.LONG, left, tag);
+		System.out.println(""+myrank+" Says : Sending message to left set of data to "+left+"");
+		MPI.COMM_WORLD.send(leftArray,leftArray.length , MPI.INT, left, tag);
 	}
 
 	private static String nameFormat(String string) {
@@ -296,8 +353,6 @@ public class MergeSort {
 			}
 			result[j+1] = temp;
 		}
-
-
 
 		return result;
 
