@@ -88,10 +88,10 @@ public class MergeSort {
 				
 				k =MPI.COMM_WORLD.recv(Control, 5, MPI.LONG, MPI.ANY_SOURCE, tag);
 				
-//				for(long i : Control){
-//					st.append(i+" ");
-//				}
-//				System.out.println(""+myrank+" Says: Control Res = "+st.toString());
+				for(long i : Control){
+					st.append(i+" ");
+				}
+				System.out.println(""+myrank+" Says: Control Res = "+st.toString());
 				message=new int[(int) Control[3]];
 				st = new StringBuffer();
 				System.out.println(""+myrank+" Says : Recieved "+Control[3]+ " data from "+k.getSource()+"");
