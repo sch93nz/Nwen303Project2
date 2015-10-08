@@ -149,6 +149,7 @@ public class MergeSort {
 						System.out.println(""+myrank+" Says : Recieving Control Sort Data data from "+right+"");
 						MPI.COMM_WORLD.recv(BControl, 5, MPI.LONG, MPI.ANY_SOURCE, tag);
 						int[] second = new int[(int) BControl[3]];
+						st = new StringBuffer();
 						for(long i : BControl){
 							st.append(i+" ");
 						}
@@ -165,6 +166,7 @@ public class MergeSort {
 						System.out.println(""+myrank+" Says : Recieving Control Sort Data data from "+left+"");
 						MPI.COMM_WORLD.recv(BControl, 5, MPI.LONG, MPI.ANY_SOURCE, tag);
 						int[] second = new int[(int) BControl[3]];
+						st = new StringBuffer();
 						for(long i : BControl){
 							st.append(i+" ");
 						}
