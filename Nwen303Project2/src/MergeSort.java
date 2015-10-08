@@ -98,10 +98,10 @@ public class MergeSort {
 				System.out.println(""+myrank+" Says: Control Res = "+st.toString());
 				message=new int[(int) Control[3]];
 				st = new StringBuffer();
-				System.out.println(""+myrank+" Says : Recieved "+Control[3]+ " data from "+k.getSource()+"");
+				System.out.println(""+myrank+" Says : Recieving "+Control[3]+ " data from "+k.getSource()+"");
 
 				k = MPI.COMM_WORLD.recv(message, (int) Control[3], MPI.INT, (int)Control[4], tag);
-
+				st = new StringBuffer();
 				for(long i : message){
 					st.append(i+" ");
 				}
@@ -180,8 +180,9 @@ public class MergeSort {
 						for(long i : BControl){
 							st.append(i+" ");
 						}
-						System.out.println(""+myrank+" Says: Control Res = "+st.toString());
+						System.out.println(""+myrank+" Says: BControl Res = "+st.toString());
 						System.out.println(""+myrank+" Says : Recieving sizeof "+BControl[3]+" Sort Data data from "+BControl[4]+"");
+						
 						j = MPI.COMM_WORLD.recv(second, (int) BControl[3], MPI.INT,(int) BControl[4], tag);
 
 						message = merge(myrank,message,length,second,(int) BControl[3]);
