@@ -67,10 +67,10 @@ public class MergeSort {
 				start = System.currentTimeMillis();
 				begin =0;
 				end =message.length;
-				if(startPoint==-1)startPoint=begin;
+				
 				if(endPoint==-1)endPoint=end;
 
-				Control[0]=begin;
+				Control[0]=end;
 				Control[1]=end /2;
 				Control[2]=1;
 				Control[3]=message.length;
@@ -107,10 +107,10 @@ public class MergeSort {
 
 
 
-				begin=(int) Control[0];
+				end=(int) Control[1];
 				
 				int length = (int) Control[3];
-				if(myrank==0 && Control[2]==0 &&begin == startPoint ){
+				if(myrank==0 && Control[2]==0 && begin == startPoint && message.length== Control[2]*2){
 					try {
 						finished = System.currentTimeMillis();
 						if(args.length<1)WriteOut(length,message,args[1]);
@@ -147,8 +147,8 @@ public class MergeSort {
 					if(myrank!=0&& Control[1]==Control[3]&& Control[2]==0){
 					
 						Control[4]=prev;
-						System.out.println(""+myrank+" Says : Decleared end and returning Sorted data sizeof "+Control[3]+" to "+prev+"");
-						System.out.println(""+myrank+" Says : Decleared end and returning sorted data to "+left+"");
+						System.out.println(""+myrank+" Says : Looking for end sizeof "+Control[3]+" to "+prev+"");
+						System.out.println(""+myrank+" Says : Looking for end sorted data to "+left+"");
 						MPI.COMM_WORLD.send(Control, 5, MPI.LONG, left, tag);
 						MPI.COMM_WORLD.send(message, message.length, MPI.INT, left, tag);
 						if(myrank!=0)
