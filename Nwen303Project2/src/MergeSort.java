@@ -87,7 +87,10 @@ public class MergeSort {
 				StringBuffer st = new StringBuffer();
 
 				k =MPI.COMM_WORLD.recv(Control, 5, MPI.LONG, MPI.ANY_SOURCE, tag);
-
+				if(Control[0] ==-1 && Control[1] ==-1 && Control[2] ==-1 && Control[3] ==-1&& Control[4]==-1){
+					System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>DEATH<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+					MPI.Finalize();
+				}
 				for(long i : Control){
 					st.append(i+" ");
 				}
@@ -111,6 +114,15 @@ public class MergeSort {
 
 				int length = (int) Control[3];
 				if(myrank==0 && Control[1]*2==Control[3] && Control[2]==0){
+					Control[0]=-1;
+					Control[1]=-1;
+					Control[2]=-1;
+					Control[3]=-1;
+					Control[4]= -1;
+					for(int i = 1; i< size;i++){
+						System.out.println("Sending kill code to "+ i);
+						MPI.COMM_WORLD.send(Control, 5, MPI.LONG, i, tag);
+					}
 					try {
 						finished = System.currentTimeMillis();
 						if(args.length<1)WriteOut(length,message,args[1]);
@@ -156,7 +168,7 @@ public class MergeSort {
 						MPI.COMM_WORLD.send(Control, 5, MPI.LONG, left, tag);
 						MPI.COMM_WORLD.send(message, message.length, MPI.INT, left, tag);
 						notDone= false;
-						run=false;
+						
 					}else if(k.getSource()==left){
 
 						System.out.println(""+myrank+" Says : Recieving Control Sort Data data from "+right+"");
@@ -206,8 +218,7 @@ public class MergeSort {
 					
 				}
 			}
-			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>DEATH<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-			MPI.Finalize();
+
 
 		} catch (MPIException e1) {
 			try {
