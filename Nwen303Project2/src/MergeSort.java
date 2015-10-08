@@ -156,7 +156,7 @@ public class MergeSort {
 						MPI.COMM_WORLD.send(Control, 5, MPI.LONG, left, tag);
 						MPI.COMM_WORLD.send(message, message.length, MPI.INT, left, tag);
 						notDone= false;
-
+						run=false;
 					}else if(k.getSource()==left){
 
 						System.out.println(""+myrank+" Says : Recieving Control Sort Data data from "+right+"");
