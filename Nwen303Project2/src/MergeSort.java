@@ -164,7 +164,7 @@ public class MergeSort {
 					System.out.println(""+myrank+" Says: looking for end Control  = "+st.toString());
 					if(myrank!=0 && (Control[1]==Control[3] && Control[2]==0)|| Control[1]*2==Control[3] && Control[2]==0){
 
-						Control[4]=prev;
+						Control[4]=myrank;
 						System.out.println(""+myrank+" Says : Looking for end sizeof "+Control[3]+" to "+prev+"");
 						System.out.println(""+myrank+" Says : Looking for end sorted data to "+left+"");
 						MPI.COMM_WORLD.send(Control, 5, MPI.LONG, left, tag);
@@ -210,11 +210,11 @@ public class MergeSort {
 					if(notDone){
 						if(Control[0]>BControl[0])Control[0]= BControl[0];
 
-						Control[4]=prev;
-						System.out.println(""+myrank+" Says : Decleared end and returning Sorted data sizeof "+Control[3]+" to "+prev+"");
+						Control[4]=myrank;
+						System.out.println(""+myrank+" Says : Decleared end and returning Sorted data sizeof "+Control[3]+" to "+left+"");
 						//System.out.println(""+myrank+" Says : Decleared end and returning sorted data to "+prev+"");
 						MPI.COMM_WORLD.send(Control, 5, MPI.LONG, left, tag);
-						MPI.COMM_WORLD.send(message, message.length, MPI.INT, prev, tag);
+						MPI.COMM_WORLD.send(message, message.length, MPI.INT, left, tag);
 					}
 					
 					
