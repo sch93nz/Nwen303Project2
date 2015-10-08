@@ -27,7 +27,7 @@ public class MergeSort {
 
 	public static void main(String[] args) throws FileNotFoundException{
 		int myrank=0;
-		long[] Control = new long[4];
+		long[] Control = new long[5];
 		int [] message=null;
 		Status k = null;
 		try {
@@ -74,7 +74,8 @@ public class MergeSort {
 				Control[1]=end;
 				Control[2]=1;
 				Control[3]=message.length;
-				MPI.COMM_WORLD.send(Control, 4, MPI.LONG, left, tag);
+				Control[4]= left;
+				MPI.COMM_WORLD.send(Control, 5, MPI.LONG, left, tag);
 				MPI.COMM_WORLD.send(message, message.length, MPI.INT, left, tag);
 				System.out.println(""+myrank+" Says : Sending first set of data to "+ left+"");
 			}
@@ -85,7 +86,7 @@ public class MergeSort {
 				
 				StringBuffer st = new StringBuffer();
 				
-				k =MPI.COMM_WORLD.recv(Control, 4, MPI.LONG, MPI.ANY_SOURCE, tag);
+				k =MPI.COMM_WORLD.recv(Control, 5, MPI.LONG, MPI.ANY_SOURCE, tag);
 				
 //				for(long i : Control){
 //					st.append(i+" ");
@@ -95,7 +96,7 @@ public class MergeSort {
 				st = new StringBuffer();
 				System.out.println(""+myrank+" Says : Recieved "+Control[3]+ " data from "+k.getSource()+"");
 				
-				k = MPI.COMM_WORLD.recv(message, (int) Control[3], MPI.INT, MPI.ANY_SOURCE, tag);
+				k = MPI.COMM_WORLD.recv(message, (int) Control[3], MPI.INT, (int)Control[4], tag);
 				
 				for(long i : message){
 					st.append(i+" ");
@@ -144,9 +145,9 @@ public class MergeSort {
 					long [] BControl= Arrays.copyOf(Control, Control.length);
 
 					if(k.getSource()==left){
-
+						
 						System.out.println(""+myrank+" Says : Recieving Control Sort Data data from "+right+"");
-						MPI.COMM_WORLD.recv(BControl, 4, MPI.LONG, MPI.ANY_SOURCE, tag);
+						MPI.COMM_WORLD.recv(BControl, 5, MPI.LONG, MPI.ANY_SOURCE, tag);
 						int[] second = new int[(int) BControl[3]];
 						System.out.println(""+myrank+" Says : Recieving sizeof "+BControl[3]+" Sort Data data from "+right+"");
 						j = MPI.COMM_WORLD.recv(second, (int) BControl[3], MPI.INT, right, tag);
@@ -158,11 +159,11 @@ public class MergeSort {
 					}else{
 
 						System.out.println(""+myrank+" Says : Recieving Control Sort Data data from "+left+"");
-						MPI.COMM_WORLD.recv(BControl, 4, MPI.LONG, MPI.ANY_SOURCE, tag);
+						MPI.COMM_WORLD.recv(BControl, 5, MPI.LONG, MPI.ANY_SOURCE, tag);
 						int[] second = new int[(int) BControl[3]];
 						System.out.println(""+myrank+" Says : Recieving sizeof "+BControl[3]+" Sort Data data from "+left+"");
 						j = MPI.COMM_WORLD.recv(second, (int) BControl[3], MPI.INT, left, tag);
-
+						
 						message = merge(myrank,second,(int) BControl[3],message,length);
 
 						Control[3] = message.length;
@@ -171,10 +172,10 @@ public class MergeSort {
 
 					if(Control[0]>BControl[0])Control[0]= BControl[0];
 					if(Control[1]<BControl[1])Control[1]=BControl[1];
-
+					Control[4]=prev;
 					System.out.println(""+myrank+" Says : Decleared end and returning Sorted data sizeof "+Control[3]+" to "+prev+"");
 					System.out.println(""+myrank+" Says : Decleared end and returning sorted data to "+prev+"");
-					MPI.COMM_WORLD.send(Control, 4, MPI.LONG, prev, tag);
+					MPI.COMM_WORLD.send(Control, 5, MPI.LONG, prev, tag);
 					MPI.COMM_WORLD.send(message, message.length, MPI.INT, prev, tag);
 					//if(myrank!=0)
 					//	run= false;
@@ -187,8 +188,10 @@ public class MergeSort {
 
 		} catch (MPIException e1) {
 			try {
-				System.out.println("||"+myrank+" Says : Recieved "+Control[3]+ " data from "+k.getSource()+"||");
-				System.out.println("||"+myrank+"||"+k.getCount(MPI.LONG)+">>>"+Control.length+"-->"+k.getSource());
+				System.out.println("||"+myrank+" Says : Recieved "+Control[3]+
+						" data from "+k.getSource()+"||");
+				System.out.println("||"+myrank+"||"+k.getCount(MPI.LONG)+">>>"
+						+Control.length+"-->"+k.getSource());
 			} catch (MPIException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -219,8 +222,8 @@ public class MergeSort {
 	private static void declearEnd(int myrank, long[] Control, int[] message,
 			Status k, int tag, int length) throws MPIException {
 		Control[2]=0;
-
-		MPI.COMM_WORLD.send(Control, 4, MPI.LONG, k.getSource(), tag);
+		Control[4]=myrank;
+		MPI.COMM_WORLD.send(Control, 5, MPI.LONG, k.getSource(), tag);
 		System.out.println(""+myrank+" Says : Decleared end and returning data sizeof -"+Control[3]+"- to "+k.getSource()+"");
 		MPI.COMM_WORLD.send(message, length, MPI.INT, k.getSource(), tag);
 	}
@@ -254,11 +257,11 @@ public class MergeSort {
 		Control[1]=end;
 		Control[2]=1;
 		Control[3]=rightArray.length;
-
+		Control[4] =myrank;
 		System.out.println("R rank="+myrank+"    :  middle="+middle+"  &&  length="+Control[3]+
 				"  &&  arrayLength="+rightArray.length+"    ->  "+right+"");
 		System.out.println(""+myrank+" Says : Sending Control to right set of data to "+right+"");
-		MPI.COMM_WORLD.send(Control, 4, MPI.LONG, right, tag);
+		MPI.COMM_WORLD.send(Control, 5, MPI.LONG, right, tag);
 		System.out.println(""+myrank+" Says : Sending message to right set of data to "+right+"");
 		MPI.COMM_WORLD.send(rightArray, rightArray.length, MPI.INT, right, tag);
 	}
@@ -288,12 +291,12 @@ public class MergeSort {
 		Control[1]=middle;
 		Control[2]=1;
 		Control[3]=leftArray.length;
-
+		Control[4] = myrank;
 System.out.println("L rank="+myrank+"    :  middle="+middle+"  &&  length="+Control[3]+
 				"  &&  ArrayLength="+leftArray.length+"    ->  "+left+"");
 
 		System.out.println(""+myrank+" Says : Sending Control to left set of data to "+left+"");
-		MPI.COMM_WORLD.send(Control, 4, MPI.LONG, left, tag);
+		MPI.COMM_WORLD.send(Control, 5, MPI.LONG, left, tag);
 		System.out.println(""+myrank+" Says : Sending message to left set of data to "+left+"");
 		MPI.COMM_WORLD.send(leftArray,leftArray.length , MPI.INT, left, tag);
 	}
