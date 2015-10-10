@@ -1,5 +1,5 @@
 
-public class main {
+public class mainTC {
 
 	public static void main(String[] args) {
 		System.out.println("Starting Testing suit");
