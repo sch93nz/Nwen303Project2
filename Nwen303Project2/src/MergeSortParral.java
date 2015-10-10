@@ -45,7 +45,7 @@ public class MergeSortParral{
 		main.start();
 		System.out.println();
 	
-		
+		 
 	}
 	
 	private static String nameFormat(String string) {

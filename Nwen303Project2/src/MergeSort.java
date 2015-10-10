@@ -54,7 +54,7 @@ public class MergeSort {
 
 		return begin+"-MG-"+end;
 	}
-
+ 
 	private static void WriteOut(int[] message)  {
 		finish = System.currentTimeMillis();
 		FileWriter writer;
