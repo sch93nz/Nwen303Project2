@@ -147,7 +147,7 @@ public class QuickSortTask extends SortTask {
 			}
 			writer.close();
 			System.out.println("Finished");
-			System.exit(0);
+			
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

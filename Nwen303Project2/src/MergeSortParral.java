@@ -45,7 +45,7 @@ public class MergeSortParral{
 		host = new MergeSortParral();
 		main = host.new Worker(null,true,message);
 		main.start();
-	
+		System.out.println();
 	
 		
 	}
@@ -132,7 +132,12 @@ public class MergeSortParral{
 				sendBack(merge());
 				running = false;
 			}
-		
+			try {
+				Worker.sleep(5);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		
 			}
 			System.out.println("\t\t|"+this.getName()+" Death |");
