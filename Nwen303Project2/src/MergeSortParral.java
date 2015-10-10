@@ -19,6 +19,7 @@ public class MergeSortParral{
 	static MergeSortParral host;
 	
 	public static void main(String[] args) {
+		outPut=args[1];
 		ArrayList<Integer> Data = new ArrayList<Integer>();
 		Scanner scan;
 		try {
@@ -44,9 +45,17 @@ public class MergeSortParral{
 		
 	}
 	
-	
+	private static String nameFormat(String string) {
+		int last = string.lastIndexOf('.');
+		String end =string.substring(last);
+		String begin= string.substring(0, last);
+
+		return begin+"-sorted-"+end;
+	}
+
 	
 	private static void WriteOut(int[] message)  {
+		finish = System.currentTimeMillis();
 		FileWriter writer;
 		try {
 			writer = new FileWriter(outPut);
@@ -66,6 +75,7 @@ public class MergeSortParral{
 			writer.write(message[i]+"\r\n");
 		}
 		writer.close();
+		System.exit(0);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -92,19 +102,28 @@ public class MergeSortParral{
 				sendBack(data);
 				running = false;
 				}
-			if( leftWorker == null){
-				int[] leftArray = new int[data.length/2];
+			if( leftWorker == null&&data.length>01){
+				int[] leftArray = new int[(data.length/2)];
 				
+				System.arraycopy(data, 0, leftArray, 0, leftArray.length);
+				
+				if(leftArray.length>0){
 				leftWorker = new Worker(this,true,leftArray);
 				leftWorker.start();
+				}
 			}
-			if(rightWorker == null){
-				int[] rightArray = new int[data.length/2];
+			if(rightWorker == null&&data.length>01){
+				int[] rightArray = new int[(data.length-(data.length/2))];
+				System.arraycopy(data, data.length/2, rightArray, 0, rightArray.length);
+				
+				if(rightArray.length>0){
 				rightWorker = new Worker(this,false,rightArray);
 				rightWorker.start();
+				}
 			}
 			if(leftData!=null && rightData != null){
 				sendBack(merge());
+				running = false;
 			}
 		
 		
@@ -141,7 +160,7 @@ public class MergeSortParral{
 	        System.arraycopy(locLeft, iFirst, result, j, leftData.length - iFirst);
 	        System.arraycopy(locRight, iSecond, result, j, locRight.length - iSecond);
 			
-			return null;
+			return result;
 		}
 
 
