@@ -61,7 +61,7 @@ public class MergeSortParral{
 		finish = System.currentTimeMillis();
 		FileWriter writer;
 		try {
-			writer = new FileWriter(outPut);
+			writer = new FileWriter(new File(outPut));
 		
 
 		writer.write("Starting time = "+start+"\r\n");
