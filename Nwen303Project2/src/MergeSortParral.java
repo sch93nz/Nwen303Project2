@@ -19,7 +19,8 @@ public class MergeSortParral{
 	static MergeSortParral host;
 	
 	public static void main(String[] args) {
-		outPut=args[1];
+		if(args.length>1)outPut=args[1];
+		else outPut = nameFormat(args[0]);
 		ArrayList<Integer> Data = new ArrayList<Integer>();
 		Scanner scan;
 		try {
@@ -51,7 +52,7 @@ public class MergeSortParral{
 		String end =string.substring(last);
 		String begin= string.substring(0, last);
 
-		return begin+"-sorted-"+end;
+		return begin+"-MGP-"+end;
 	}
 
 	

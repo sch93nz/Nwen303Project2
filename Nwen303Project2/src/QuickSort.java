@@ -5,22 +5,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-/**
- *
- */
+public class QuickSort {
 
-/**
- * @author Matthew Schmidt
- *
- */
-public class MergeSort {
-
-	static long start;
-
+	private static long start;
 	private static String outPut;
+	private static int[] data;
 	private static long finish;
 
-	public static void main(String [] args){
+	public static void main(String[] args) {
 		if(args.length>1)outPut=args[1];
 		else outPut = nameFormat(args[0]);
 		ArrayList<Integer> Data = new ArrayList<Integer>();
@@ -42,8 +34,12 @@ public class MergeSort {
 			message[i]= (int) Data.get(i);
 		}
 		System.out.println("start");
+		data=message;
 		start = System.currentTimeMillis();
-		WriteOut(Merge_Sort(message));
+	
+		Quick(0,data.length-1);
+
+		WriteOut(data);
 	}
 
 	private static String nameFormat(String string) {
@@ -51,9 +47,10 @@ public class MergeSort {
 		String end =string.substring(last);
 		String begin= string.substring(0, last);
 
-		return begin+"-MG-"+end;
+		return begin+"-Quick-"+end;
 	}
 
+	
 	private static void WriteOut(int[] message)  {
 		finish = System.currentTimeMillis();
 		FileWriter writer;
@@ -84,48 +81,40 @@ public class MergeSort {
 		}
 	}
 	
-	private static int[] Merge_Sort(int[] message) {
-		if(message.length<=1) return message;
-
-		int[] leftArray = new int[(message.length/2)];
-		System.arraycopy(message, 0, leftArray, 0, leftArray.length);
-		leftArray=Merge_Sort(leftArray);
-		int[] rightArray = new int[(message.length-(message.length/2))];
-		System.arraycopy(message, message.length/2, rightArray, 0, rightArray.length);
-		rightArray=Merge_Sort(rightArray);
-
-		return merge(leftArray,rightArray);
-
+	private static void Quick( int lo, int hi) {
+		if( lo >= hi)
+			return;
+		
+		int pivot = data[hi];
+		
+		int partition = Partition(lo,hi,pivot);
+		Quick(0,partition-1);
+		
+		Quick(partition+1,hi);
+		
 	}
-	private static int[] merge(int [] locLeft,int[] locRight) {
-
-		int [] result = new int [locLeft.length+locRight.length];
-
-		//I never get this bit right so i copyied it  from
-		// http://javahungry.blogspot.com/2013/06/java-sorting-program-code-merge-sort.html
-		int iFirst = 0;
-		// Next element to consider in the second array
-		int iSecond = 0;
-
-		// Next open position in the result
-		int j = 0;
-		// As long as neither iFirst nor iSecond is past the end, move the
-		// smaller element into the result.
-		while (iFirst < locLeft.length && iSecond < locRight.length) {
-			if (locLeft[iFirst] < locRight[iSecond]) {
-				result[j] = locLeft[iFirst];
-				iFirst++;
-			} else {
-				result[j] = locRight[iSecond];
-				iSecond++;
+	// i stuffed up this method something terrible so i copied code from.
+	//http://examples.javacodegeeks.com/core-java/quicksort-algorithm-in-java-code-example/
+	private static int Partition(int left,int right,int pivot){
+		int leftCursor = left-1;
+		int rightCursor = right;
+		while(leftCursor < rightCursor){
+                while(data[++leftCursor] < pivot);
+                while(rightCursor > 0 && data[--rightCursor] > pivot);
+			if(leftCursor >= rightCursor){
+				break;
+			}else{
+				swap(leftCursor, rightCursor,data);
 			}
-			j++;
 		}
-		// copy what's left
-		System.arraycopy(locLeft, iFirst, result, j, locLeft.length - iFirst);
-		System.arraycopy(locRight, iSecond, result, j, locRight.length - iSecond);
-
-		return result;
+		swap(leftCursor, right,data);
+		return leftCursor;
 	}
 
+	private static void swap(int loC, int hiC, int[] data) {
+		int temp =data[loC];
+		data[loC] = data[hiC];
+		data[hiC]=temp;
+	}
+	
 }
