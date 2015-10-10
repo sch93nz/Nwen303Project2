@@ -103,7 +103,7 @@ public class MergeSortParral{
 		
 		
 		public void run(){
-			//System.out.println(""+this.getName()+" Starts");
+			System.out.println("|"+this.getName()+" Starts |");
 			while(running){
 		if (data.length<=1){
 				sendBack(data);
@@ -135,7 +135,7 @@ public class MergeSortParral{
 		
 		
 			}
-			//System.out.println(""+this.getName()+" Death");
+			System.out.println("\t\t|"+this.getName()+" Death |");
 		}
 
 
