@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import mpi.MPI;
-
 public class MergeSortParral{
 
 	private static long start;
