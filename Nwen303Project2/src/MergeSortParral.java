@@ -62,7 +62,9 @@ public class MergeSortParral{
 		FileWriter writer;
 		try {
 			File file = new File(outPut);
-			if(!file.exists())file.createNewFile();
+			
+				file.createNewFile();
+			
 			writer = new FileWriter(file);
 
 		writer.write("Starting time = "+start+"\r\n");

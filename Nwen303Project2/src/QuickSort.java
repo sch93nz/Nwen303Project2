@@ -56,7 +56,9 @@ public class QuickSort {
 		FileWriter writer;
 		try {
 			File file = new File(outPut);
-			if(!file.exists())file.createNewFile();
+		
+				file.createNewFile();
+			
 			writer = new FileWriter(file);
 		
 

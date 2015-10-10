@@ -134,7 +134,9 @@ public class QuickSortTask extends SortTask {
 		FileWriter writer;
 		try {
 			File file = new File(outPut);
-			if(!file.exists())file.createNewFile();
+			
+				file.createNewFile();
+			
 			writer = new FileWriter(file);
 
 
