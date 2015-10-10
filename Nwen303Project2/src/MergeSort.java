@@ -21,7 +21,7 @@ public class MergeSort {
 	private static long finish;
 
 	public static void main(String [] args){
-		if(args.length>1)outPut=args[1];
+		if(args.length>1)outPut=nameFormat(args[1]);
 		else outPut = nameFormat(args[0]);
 		ArrayList<Integer> Data = new ArrayList<Integer>();
 		Scanner scan;
@@ -41,9 +41,10 @@ public class MergeSort {
 		for (int i=0;i<message.length;i++){
 			message[i]= (int) Data.get(i);
 		}
-		System.out.println("start");
+		System.out.println("start MG");
 		start = System.currentTimeMillis();
 		WriteOut(Merge_Sort(message));
+		
 	}
 
 	private static String nameFormat(String string) {
@@ -76,7 +77,7 @@ public class MergeSort {
 		}
 		writer.close();
 		System.out.println("Finished");
-		System.exit(0);
+		
 		
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

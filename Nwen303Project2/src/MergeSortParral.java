@@ -19,7 +19,7 @@ public class MergeSortParral{
 	static MergeSortParral host;
 	
 	public static void main(String[] args) {
-		if(args.length>1)outPut=args[1];
+		if(args.length>1)outPut=nameFormat(args[1]);
 		else outPut = nameFormat(args[0]);
 		ArrayList<Integer> Data = new ArrayList<Integer>();
 		Scanner scan;
@@ -39,11 +39,14 @@ public class MergeSortParral{
 		for (int i=0;i<message.length;i++){
 			message[i]= (int) Data.get(i);
 		}
-		System.out.println("start");
+		System.out.println("start MGP");
+
 		start = System.currentTimeMillis();
 		host = new MergeSortParral();
 		main = host.new Worker(null,true,message);
 		main.start();
+	
+	
 		
 	}
 	
@@ -77,9 +80,8 @@ public class MergeSortParral{
 			writer.write(message[i]+"\r\n");
 		}
 		writer.close();
-		System.out.println("Finished");
-		System.exit(0);
-		
+		System.out.println("Finished MGP");
+	
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -101,7 +103,7 @@ public class MergeSortParral{
 		
 		
 		public void run(){
-			System.out.println(""+this.getName()+" Starts");
+			//System.out.println(""+this.getName()+" Starts");
 			while(running){
 		if (data.length<=1){
 				sendBack(data);
@@ -133,7 +135,7 @@ public class MergeSortParral{
 		
 		
 			}
-			System.out.println(""+this.getName()+" Death");
+			//System.out.println(""+this.getName()+" Death");
 		}
 
 

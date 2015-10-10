@@ -13,7 +13,7 @@ public class QuickSort {
 	private static long finish;
 
 	public static void main(String[] args) {
-		if(args.length>1)outPut=args[1];
+		if(args.length>1)outPut=nameFormat(args[1]);
 		else outPut = nameFormat(args[0]);
 		ArrayList<Integer> Data = new ArrayList<Integer>();
 		Scanner scan;
@@ -33,7 +33,7 @@ public class QuickSort {
 		for (int i=0;i<message.length;i++){
 			message[i]= (int) Data.get(i);
 		}
-		System.out.println("start");
+		System.out.println("start Quick");
 		data=message;
 		start = System.currentTimeMillis();
 	
@@ -73,7 +73,7 @@ public class QuickSort {
 		}
 		writer.close();
 		System.out.println("Finished");
-		System.exit(0);
+
 		
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
