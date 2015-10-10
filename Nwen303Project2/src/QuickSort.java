@@ -15,6 +15,7 @@ public class QuickSort {
 	public static void main(String[] args) {
 		if(args.length>1)outPut=nameFormat(args[1]);
 		else outPut = nameFormat(args[0]);
+		
 		ArrayList<Integer> Data = new ArrayList<Integer>();
 		Scanner scan;
 		try {

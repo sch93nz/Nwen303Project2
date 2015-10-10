@@ -102,6 +102,7 @@ public class MergeSort {
 		return merge(leftArray,rightArray);
 
 	}
+	
 	private static int[] merge(int [] locLeft,int[] locRight) {
 
 		int [] result = new int [locLeft.length+locRight.length];

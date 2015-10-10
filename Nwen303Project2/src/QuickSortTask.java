@@ -26,6 +26,15 @@ public class QuickSortTask extends SortTask {
 	ExecutorService threadPool;
 	List futureList;
 
+	
+	
+	/**
+	 * 
+	 */
+	public QuickSortTask() {
+		super();
+	}
+
 	public QuickSortTask(ExecutorService threadPool, List futureList, int[] inList,int start, int end){
 		this.sortArray = inList;
 		this.iStart = start;
@@ -54,7 +63,15 @@ public class QuickSortTask extends SortTask {
 
 		while (leftPointer != rightPointer) {
 			if (pointerSide == RIGHT) {
-				if (inList[rightPointer] < pivot) {           inList[leftPointer] = inList[rightPointer];           leftPointer++;           pointerSide = LEFT;         } else {           rightPointer--;         }       } else if (pointerSide == LEFT) {         if (inList[leftPointer] > pivot) {
+				if (inList[rightPointer] < pivot) {
+					inList[leftPointer] = inList[rightPointer];
+					leftPointer++;
+					pointerSide = LEFT;
+					} else {
+						rightPointer--; 
+						} 
+				} else if (pointerSide == LEFT) {  
+					if (inList[leftPointer] > pivot) {
 					inList[rightPointer] = inList[leftPointer];
 					rightPointer--;
 					pointerSide = RIGHT;
@@ -88,6 +105,7 @@ public class QuickSortTask extends SortTask {
 	public static void main(String [] args){
 		if(args.length>1)outPut=nameFormat(args[1]);
 		else outPut = nameFormat(args[0]);
+		
 		ArrayList<Integer> Data = new ArrayList<Integer>();
 		Scanner scan;
 		try {
@@ -133,11 +151,7 @@ public class QuickSortTask extends SortTask {
 		finish = System.currentTimeMillis();
 		FileWriter writer;
 		try {
-			File file = new File(outPut);
-			 
-				file.createNewFile();
-			
-			writer = new FileWriter(file);
+			writer = new FileWriter(new File(outPut));
 
 
 			writer.write("Starting time = "+start+"\r\n");
