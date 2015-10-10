@@ -38,6 +38,7 @@ public class MergeSortParral{
 		for (int i=0;i<message.length;i++){
 			message[i]= (int) Data.get(i);
 		}
+		System.out.println("start");
 		start = System.currentTimeMillis();
 		host = new MergeSortParral();
 		main = host.new Worker(null,true,message);
@@ -75,7 +76,9 @@ public class MergeSortParral{
 			writer.write(message[i]+"\r\n");
 		}
 		writer.close();
+		System.out.println("Finished");
 		System.exit(0);
+		
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -97,6 +100,7 @@ public class MergeSortParral{
 		
 		
 		public void run(){
+			System.out.println(""+this.getName()+" Starts");
 			while(running){
 		if (data.length<=1){
 				sendBack(data);
@@ -128,6 +132,7 @@ public class MergeSortParral{
 		
 		
 			}
+			System.out.println(""+this.getName()+" Death");
 		}
 
 
