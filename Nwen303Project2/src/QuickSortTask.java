@@ -43,6 +43,7 @@ public class QuickSortTask extends SortTask {
 		sort(sortArray, iStart, iEnd) ;
 	}
 
+	@SuppressWarnings("unchecked")
 	private   void sort(final int inList[], int start, int end) {
 		int pivot = inList[start]; // consider this as  hole at inList[start],
 		int leftPointer = start;
@@ -83,6 +84,7 @@ public class QuickSortTask extends SortTask {
 		}
 
 	}
+	@SuppressWarnings("unchecked")
 	public static void main(String [] args){
 		if(args.length>1)outPut=nameFormat(args[1]);
 		else outPut = nameFormat(args[0]);
@@ -105,6 +107,7 @@ public class QuickSortTask extends SortTask {
 			sortArray[i]= (int) Data.get(i);
 		}
 		final ExecutorService executor = Executors.newFixedThreadPool(10);
+		@SuppressWarnings("rawtypes")
 		List futures = new Vector();
 		QuickSortTask rootTask = new QuickSortTask (executor,futures,sortArray,0,sortArray.length-1)  ;
 		System.out.println("Start Quick Parral");
@@ -112,6 +115,7 @@ public class QuickSortTask extends SortTask {
 		futures.add(executor.submit(rootTask));
 		while(!futures.isEmpty()){
 			//     System.out.println("Future size " +futures.size());
+			@SuppressWarnings("rawtypes")
 			Future topFeature = (Future) futures.remove(0);
 			try{
 				if(topFeature!=null)topFeature.get();
