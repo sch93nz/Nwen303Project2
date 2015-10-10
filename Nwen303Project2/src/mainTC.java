@@ -14,8 +14,8 @@ public class mainTC {
 		System.out.println("Starting Testing suit");
 		MergeSort a = new MergeSort();
 		a.main(test);
-		 QuickSort b = new QuickSort();
-		b.main(test);
+		// QuickSort b = new QuickSort();
+		//b.main(test);
 		
 		MergeSortParral c = new MergeSortParral();
 		c.main(test);

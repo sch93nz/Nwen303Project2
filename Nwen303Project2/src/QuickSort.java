@@ -92,7 +92,7 @@ public class QuickSort {
 		
 		int pivot = data[hi];
 		
-		int partition = Partition(lo,hi,pivot);
+		int partition = Partition(lo,hi,pivot); 
 		Quick(0,partition-1);
 		
 		Quick(partition+1,hi);
